@@ -6,9 +6,7 @@ import Newsletter from './components/newsletter'
 import Zigzag from './components/zigzag'
 import Testimonials from './components/testimonials'
 
-import PageIllustration from './components/page-illustration'
 import Footer from './components/ui/footer'
-import Header from './components/ui/header'
 import Banner from './components/banner'
 import './css/style.css'
 
@@ -27,21 +25,19 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex flex-col min-h-screen overflow-hidden">
-        <Header/>
-        <main className="grow">
-          <PageIllustration />
+
+          
 
           <Hero />
           <Features />
           <Zigzag />
           <Testimonials />
           <Newsletter />
-        </main>
+
 
         <Footer />
         <Banner/>
-      </div>
+
     </>
   )
 }
