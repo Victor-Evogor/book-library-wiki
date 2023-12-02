@@ -1,0 +1,1 @@
+export const STATUS_API_ENDPOINT = '/status' as const

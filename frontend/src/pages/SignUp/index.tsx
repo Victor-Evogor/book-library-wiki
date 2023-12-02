@@ -1,6 +1,62 @@
-import { Link } from 'react-router-dom'
+import { MouseEventHandler, useEffect, useRef, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { client, user } from '../../feathers'
 
 export default function SignUp() {
+  const navigate = useNavigate()
+
+  const emailInput = useRef<HTMLInputElement>(null)
+  const passwordInput = useRef<HTMLInputElement>(null)
+  const usernameInput = useRef<HTMLInputElement>(null)
+  const [errorMessage, setErrorMessage] = useState('')
+  const errorMessageDuration = 3 // seconds
+
+  useEffect(()=>{
+    client.authentication.getAccessToken().then(accessToken => {
+      if (accessToken){
+        navigate('/app/home')
+      }
+    })
+  })
+
+  useEffect(() => {
+    if (errorMessage)
+      setTimeout(() => {
+        setErrorMessage('')
+      }, errorMessageDuration * 1_000)
+  }, [errorMessage])
+
+  const signUpHandler:MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault()
+    if(!emailInput.current || !passwordInput.current || !usernameInput.current)
+      return
+
+      const email = emailInput.current.value
+      const password = passwordInput.current.value
+      const username = usernameInput.current.value
+      if(!email || !password || !username)
+        return
+      
+      user.create({
+        email,
+        password,
+        username
+      }).then(async ()=>{
+        await client.authenticate({
+          strategy: 'local',
+          email,
+          password
+        })
+        navigate('/app/home')
+      }).catch(error => {
+        setErrorMessage(error.message)
+      })
+  }
+
+  const oAuthSignUpEventHandler:MouseEventHandler<HTMLButtonElement> = (e) =>{
+    e.preventDefault()
+  }
+
   return (
     <section className="relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -8,7 +64,7 @@ export default function SignUp() {
           {/* Page header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
             <h1 className="h1">
-              Welcome. We exist to make entrepreneurship easier.
+              Welcome. We exist to make reading fun.
             </h1>
           </div>
 
@@ -17,7 +73,7 @@ export default function SignUp() {
             <form>
               <div className="flex flex-wrap -mx-3">
                 <div className="w-full px-3">
-                  <button className="btn px-0 text-white bg-red-600 hover:bg-red-700 w-full relative flex items-center">
+                  <button className="btn px-0 text-white bg-red-600 hover:bg-red-700 w-full relative flex items-center" onClick={oAuthSignUpEventHandler}>
                     <svg
                       className="w-4 h-4 fill-current text-white opacity-75 shrink-0 mx-4"
                       viewBox="0 0 16 16"
@@ -47,6 +103,13 @@ export default function SignUp() {
                 aria-hidden="true"
               ></div>
             </div>
+            {errorMessage ? (
+              <div>
+                <div className="text-center bg-red-800 p-2">{errorMessage}</div>
+              </div>
+            ) : (
+              <></>
+            )}
             <form>
               <div className="flex flex-wrap -mx-3 mb-4">
                 <div className="w-full px-3">
@@ -54,48 +117,34 @@ export default function SignUp() {
                     className="block text-gray-300 text-sm font-medium mb-1"
                     htmlFor="full-name"
                   >
-                    Full Name <span className="text-red-600">*</span>
+                    Username <span className="text-red-600">*</span>
                   </label>
                   <input
                     id="full-name"
                     type="text"
                     className="form-input w-full text-gray-300"
-                    placeholder="First and last name"
+                    placeholder="Enter a username"
                     required
+                    ref={usernameInput}
                   />
                 </div>
               </div>
-              <div className="flex flex-wrap -mx-3 mb-4">
-                <div className="w-full px-3">
-                  <label
-                    className="block text-gray-300 text-sm font-medium mb-1"
-                    htmlFor="company-name"
-                  >
-                    Company Name <span className="text-red-600">*</span>
-                  </label>
-                  <input
-                    id="company-name"
-                    type="text"
-                    className="form-input w-full text-gray-300"
-                    placeholder="Your company or app name"
-                    required
-                  />
-                </div>
-              </div>
+
               <div className="flex flex-wrap -mx-3 mb-4">
                 <div className="w-full px-3">
                   <label
                     className="block text-gray-300 text-sm font-medium mb-1"
                     htmlFor="email"
                   >
-                    Work Email <span className="text-red-600">*</span>
+                    Email <span className="text-red-600">*</span>
                   </label>
                   <input
                     id="email"
                     type="email"
                     className="form-input w-full text-gray-300"
-                    placeholder="you@yourcompany.com"
+                    placeholder="Enter your email"
                     required
+                    ref={emailInput}
                   />
                 </div>
               </div>
@@ -113,6 +162,8 @@ export default function SignUp() {
                     className="form-input w-full text-gray-300"
                     placeholder="Password (at least 10 characters)"
                     required
+                    minLength={10}
+                    ref={passwordInput}
                   />
                 </div>
               </div>
@@ -129,14 +180,14 @@ export default function SignUp() {
               </div>
               <div className="flex flex-wrap -mx-3 mt-6">
                 <div className="w-full px-3">
-                  <button className="btn text-white bg-purple-600 hover:bg-purple-700 w-full">
+                  <button className="btn text-white bg-purple-600 hover:bg-purple-700 w-full" onClick={signUpHandler}>
                     Sign up
                   </button>
                 </div>
               </div>
             </form>
             <div className="text-gray-400 text-center mt-6">
-              Already using Open PRO?{' '}
+              Already on Book Library Wiki?{' '}
               <Link
                 to="/signin"
                 className="text-purple-600 hover:text-gray-200 transition duration-150 ease-in-out"

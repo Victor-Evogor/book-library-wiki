@@ -5,6 +5,4 @@ const createAppStore = () => configureStore({
   reducer: rootReducer
 })
 
-
-
 export default createAppStore

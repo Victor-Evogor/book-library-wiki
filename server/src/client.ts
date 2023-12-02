@@ -4,6 +4,9 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { statusClient } from './services/status/status.shared'
+export type { Status, StatusData, StatusQuery, StatusPatch } from './services/status/status.shared'
+
 import { wikiClient } from './services/wikis/wikis.shared'
 export type { Wiki, WikiData, WikiQuery, WikiPatch } from './services/wikis/wikis.shared'
 
@@ -38,5 +41,6 @@ export const createClient = <Configuration = any,>(
 
   client.configure(userClient)
   client.configure(wikiClient)
+  client.configure(statusClient)
   return client
 }
