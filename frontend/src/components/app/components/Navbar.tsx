@@ -8,6 +8,8 @@ import Logo from '../../../assets/logos/png/logo-no-background.png'
 import { AiOutlineBars } from 'react-icons/ai'
 import { client } from '../../../feathers'
 import useCreateDispatcher from '../../../redux/useCreateDispatcher'
+import noUser from '../../../assets/images/no_user-v2.svg'
+import noUserW from '../../../assets/images/no_user.png'
 
 const Navbar = memo(() => {
   const dispatch = useCreateDispatcher()
@@ -19,7 +21,7 @@ const Navbar = memo(() => {
 
   const userData = {
     email: 'victorevogor',
-    avatar: '/profile.jpg',
+    avatar: '',
     name: 'Victor',
   }
 
@@ -55,7 +57,7 @@ const Navbar = memo(() => {
             onClick={handleProfileClick}
           >
             <img
-              src={userData.avatar}
+              src={userData.avatar || noUserW}
               alt="profile"
               className="h-8 w-8 rounded-full object-cover"
             />
@@ -80,7 +82,7 @@ const Navbar = memo(() => {
                 <div className="py-1" role="none">
                   <div className="flex flex-col items-center">
                     <img
-                      src={userData.avatar}
+                      src={userData.avatar || noUser}
                       alt="profile"
                       className="mb-2 h-16 w-16 rounded-full object-cover"
                     />

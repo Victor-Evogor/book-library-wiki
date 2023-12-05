@@ -1,19 +1,11 @@
 import { combineReducers } from 'redux'
 import { Store } from '../Store'
 import { Action } from '../Action'
+import user from './user'
 
 const rootReducer = combineReducers<Store, Action>({
   // add reducers here
-  user: (state = { accessToken: null }, action) => {
-    switch (action.type) {
-      case 'user/access-token':
-        return {
-          ...state,
-          accessToken: action.payload.accessToken,
-        }
-    }
-    return state
-  },
+  user,
 })
 
 export default rootReducer

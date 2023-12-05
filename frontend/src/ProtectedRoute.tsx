@@ -16,7 +16,9 @@ interface ProtectedRouteProps {
 const ProtectedRoute: FunctionComponent<
   PropsWithChildren & ProtectedRouteProps
 > = ({ children, userData }) => {
-  const accessToken = useSelector<Store, string | null>((state) => state.user.accessToken)
+  const accessToken = useSelector<Store, string | null>(
+    (state) => state.user.accessToken
+  )
   const disPatch = useDispatch<Dispatch<Action>>()
   const isAuthenticated = useMemo(() => {
     return (
@@ -29,11 +31,24 @@ const ProtectedRoute: FunctionComponent<
 
   useEffect(() => {
     client.authentication.getAccessToken().then((accessToken) => {
-      console.log(accessToken)
-      disPatch({type: 'user/access-token', payload: {accessToken}})
+      disPatch({ type: 'user/access-token', payload: { accessToken } })
     })
   }, [accessToken, disPatch])
-  console.log(isAuthenticated(userData, accessToken))
+
+  useEffect(()=> {
+      // checking if acess token has expired
+      (async ()=>{
+        try{
+          await client.reAuthenticate()
+          const user = await client.get('authentication')
+          // update user state
+        }catch (e){
+          console.log(e)
+          await client.authentication.logout()
+          disPatch({ type: 'user/access-token', payload: { accessToken: null } })
+        }
+      })()
+  }, [disPatch])
 
   if (isAuthenticated(userData, accessToken)) {
     return <div>{children}</div>

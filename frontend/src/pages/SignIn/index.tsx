@@ -33,8 +33,6 @@ export default function SignIn() {
   const signInHandler: MouseEventHandler<HTMLButtonElement> = useCallback(
     (e) => {
       e.preventDefault()
-      console.log('Sign in handler ran')
-      console.log(!emailInput.current || !passwordInput.current)
       if (!emailInput.current || !passwordInput.current) return
 
       const email = emailInput.current.value
@@ -47,7 +45,8 @@ export default function SignIn() {
           email,
           password,
         })
-        .then(() => {
+        .then((res) => {
+          console.log(res)
           navigate('/app/home')
         })
         .catch(() => {

@@ -1,1 +1,1 @@
-export type ActionTypes = 'user/access-token'
+export type ActionTypes = 'user/access-token' | 'user/user-details'

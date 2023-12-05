@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { client } from '../../feathers'
 import PageIllustration from '../../pages/LandingPage/components/page-illustration'
 import Leftbar from './components/LeftBar'
 import Navbar from './components/Navbar'
@@ -5,6 +7,11 @@ import Rightbar from './components/RightBar'
 import { Outlet } from 'react-router-dom'
 
 const Layout = () => {
+  useEffect(()=>{
+    (async ()=>
+    console.log(await client.authentication.service)
+    )()
+  }, [])
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       <main className="grow">
