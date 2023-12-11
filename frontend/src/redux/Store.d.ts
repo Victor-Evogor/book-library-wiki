@@ -1,7 +1,8 @@
+import { User } from "../types/User";
+import { ReactNode } from 'react'
+
 export interface Store {
-    user: {
-        accessToken: string | null,
-        username?: string,
-        email?: string
-    }
+    user: User,
+    isModalOpen: boolean,
+    modalContent: null | ReactNode
 }

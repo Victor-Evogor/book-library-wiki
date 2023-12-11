@@ -8,6 +8,10 @@ import {
 } from "react-icons/hi2";
 import { HiOutlineUserGroup } from "react-icons/hi2";
 import { GiTeamIdea } from "react-icons/gi";
+import useCreateDispatcher from "../../../redux/useCreateDispatcher";
+import Modal from "./Modal";
+import { useSelector } from "react-redux";
+import { Store } from "../../../redux/Store";
 
 interface LeftBarProps {
     showLeftbar: true
@@ -15,6 +19,8 @@ interface LeftBarProps {
 
 const Leftbar:FunctionComponent<LeftBarProps> = memo(({ showLeftbar }) => {
 
+  const dispatch = useCreateDispatcher()
+  const isModalOpen = useSelector<Store, boolean>((state) => state.isModalOpen)
     // mock user 
     const user = {
         role: 'general'
@@ -120,6 +126,19 @@ const Leftbar:FunctionComponent<LeftBarProps> = memo(({ showLeftbar }) => {
             </div>
           )}
         </div>
+        <button onClick={()=>{
+          
+          dispatch({
+            type: 'is-modal-open/toggle',
+            payload: !isModalOpen
+          })
+          dispatch({
+            type: 'modal-content',
+            payload: <Modal>
+              <div>Wiki Name</div>
+            </Modal>
+          })
+        }}>Create a Wiki Post</button>
       </div>
     </div>
   );

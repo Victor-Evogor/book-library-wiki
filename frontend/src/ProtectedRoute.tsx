@@ -19,7 +19,7 @@ const ProtectedRoute: FunctionComponent<
   const accessToken = useSelector<Store, string | null>(
     (state) => state.user.accessToken
   )
-  const disPatch = useDispatch<Dispatch<Action>>()
+  const dispatch = useDispatch<Dispatch<Action>>()
   const isAuthenticated = useMemo(() => {
     return (
       userData: ProtectedRouteProps['userData'],
@@ -31,24 +31,25 @@ const ProtectedRoute: FunctionComponent<
 
   useEffect(() => {
     client.authentication.getAccessToken().then((accessToken) => {
-      disPatch({ type: 'user/access-token', payload: { accessToken } })
+      dispatch({ type: 'user/access-token', payload: { accessToken } })
     })
-  }, [accessToken, disPatch])
+  }, [accessToken, dispatch])
 
-  useEffect(()=> {
-      // checking if acess token has expired
-      (async ()=>{
-        try{
-          await client.reAuthenticate()
-          const user = await client.get('authentication')
-          // update user state
-        }catch (e){
-          console.log(e)
-          await client.authentication.logout()
-          disPatch({ type: 'user/access-token', payload: { accessToken: null } })
-        }
-      })()
-  }, [disPatch])
+  useEffect(() => {
+    // checking if acess token has expired
+    (async () => {
+      try {
+        await client.reAuthenticate()
+        const { user } = await client.get('authentication')
+        dispatch({ type: 'user/user-details', payload: user })
+        // update user state
+      } catch (e) {
+        console.log(e)
+        await client.authentication.logout()
+        dispatch({ type: 'user/access-token', payload: { accessToken: null } })
+      }
+    })()
+  }, [dispatch])
 
   if (isAuthenticated(userData, accessToken)) {
     return <div>{children}</div>

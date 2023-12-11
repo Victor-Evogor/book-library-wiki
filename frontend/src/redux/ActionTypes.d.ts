@@ -1,1 +1,1 @@
-export type ActionTypes = 'user/access-token' | 'user/user-details'
+export type ActionTypes = 'user/access-token' | 'user/user-details' | 'is-modal-open/toggle' | 'modal-content'

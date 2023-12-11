@@ -26,3 +26,4 @@ lib
 
 .nx/installation
 .nx/cache
+.env

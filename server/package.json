@@ -37,7 +37,7 @@
   "scripts": {
     "dev": "nodemon -x ts-node src/index.ts",
     "compile": "shx rm -rf lib/ && tsc",
-    "start": "node lib/",
+    "start": "NODE_ENV=production node lib/",
     "prettier": "npx prettier \"**/*.ts\" --write",
     "mocha": "cross-env NODE_ENV=test mocha test/ --require ts-node/register --recursive --extension .ts --exit",
     "test": "npm run mocha",
@@ -68,6 +68,7 @@
     "@types/node": "^20.4.2",
     "axios": "^1.4.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.3.1",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
     "prettier": "^3.1.0",

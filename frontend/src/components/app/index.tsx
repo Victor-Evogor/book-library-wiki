@@ -1,19 +1,22 @@
-import { useEffect } from 'react'
-import { client } from '../../feathers'
+import { useSelector } from 'react-redux'
 import PageIllustration from '../../pages/LandingPage/components/page-illustration'
 import Leftbar from './components/LeftBar'
 import Navbar from './components/Navbar'
 import Rightbar from './components/RightBar'
 import { Outlet } from 'react-router-dom'
+import { Store } from '../../redux/Store'
+import { ReactNode } from 'react'
+import useCreateDispatcher from '../../redux/useCreateDispatcher'
 
 const Layout = () => {
-  useEffect(()=>{
-    (async ()=>
-    console.log(await client.authentication.service)
-    )()
-  }, [])
+  const isModalOpen = useSelector<Store, boolean>((state) => state.isModalOpen)
+  const dispatch = useCreateDispatcher()
+  const modalContent = useSelector<Store, ReactNode | null>(
+    (state) => state.modalContent
+  )
+
   return (
-    <div className="flex flex-col min-h-screen overflow-hidden">
+    <div className="flex flex-col min-h-screen overflow-hidden relative">
       <main className="grow">
         <PageIllustration />
         <div>
@@ -27,6 +30,19 @@ const Layout = () => {
           </div>
         </div>
       </main>
+      {isModalOpen ? (
+        <div className="absolute w-screen h-screen bg-gray-950 bg-opacity-60 z-40 text-black grid place-items-center" onClick={() => {
+          dispatch({type: 'is-modal-open/toggle', payload: !isModalOpen})
+        }}>
+          <div className="bg-slate-200 p-6 rounded-lg" onClickCapture={e => {
+            e.stopPropagation()
+          }}>
+            {modalContent || <></>}
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   )
 }

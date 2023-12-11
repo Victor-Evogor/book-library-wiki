@@ -15,13 +15,13 @@ export const userSchema = Type.Object(
     _id: ObjectIdSchema(),
     email: Type.String(),
     username: Type.String(),
-    displayName: Type.String(),
     avatar: Type.Optional(Type.String()),
     wikis: Type.Array(Type.String()),
     following: Type.Array(Type.String()),
     followers: Type.Array(Type.String()),
     password: Type.Optional(Type.String()),
-    googleId: Type.Optional(Type.String())
+    googleId: Type.Optional(Type.String()),
+    bio: Type.String()
   },
   { $id: 'User', additionalProperties: false }
 )

@@ -38,7 +38,7 @@ export const user = (app: Application) => {
       find: [authenticate('jwt')],
       get: [authenticate('jwt')],
       create: [],
-      update: [authenticate('jwt')],
+      update: [authenticate('jwt'), async ()=>{console.log('update ran')}],
       patch: [authenticate('jwt')],
       remove: [authenticate('jwt')]
     },

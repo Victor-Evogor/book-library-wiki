@@ -1,0 +1,6 @@
+{
+    "origins": [
+        "https://booklibwiki.netlify.app"
+    ],
+    "mongodb": "mongodb+srv://%s:%s@remote-db.yh3o1fg.mongodb.net/?retryWrites=true&w=majority"
+}
