@@ -31,11 +31,11 @@ const EditProfile: FunctionComponent = () => {
     console.log(base64string)
     try{
       console.log('Updating user')
-      /* const updatedUser = await client.authentication.service.patch(user._id as string, {
+      const updatedUser = await client.authentication.service.update(user._id as string, {
         username: usernameValue,
         avatar: base64string,
         bio: aboutValue
-      }) */
+      })
       console.log(updatedUser)
     } catch(e) {
       console.error(e)
