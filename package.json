@@ -18,7 +18,6 @@
     "nx-cloud": "latest"
   },
   "dependencies": {
-    "react-icons": "^4.12.0",
-    "react-spinners": "^0.13.8"
+
   }
 }

@@ -7,13 +7,14 @@ import { Store } from '../../../redux/Store'
 import { User } from '../../../types/User'
 import loadImage from '../../../utils/loadImage'
 import { client } from '../../../feathers'
+import useCreateDispatcher from '../../../redux/useCreateDispatcher'
 
 const EditProfile: FunctionComponent = () => {
   const username = useRef<HTMLInputElement>(null)
   const about = useRef<HTMLTextAreaElement>(null)
   const file = useRef<HTMLInputElement>(null)
+  const dispatch = useCreateDispatcher()
   const user = useSelector<Store, User>((state) => state.user)
-  console.log(user)
 
   const updateUserEventHandler: FormEventHandler<HTMLFormElement> = useCallback(async (e) => {
     e.preventDefault()
@@ -23,20 +24,22 @@ const EditProfile: FunctionComponent = () => {
     const usernameValue = username.current.value
     const aboutValue = about.current.value
     const files = file.current.files
-    if (!usernameValue || !aboutValue || !files) {
+    if (!usernameValue || !aboutValue || (!files && !user.avatar)) {
       // TODO: add friendly message to user to fill in all the required fields
       return
     }
-    const base64string = await loadImage(files[0])
+    let base64string: string = '';
+    if(files && files.length > 0)
+      base64string = await loadImage(files[0])
     console.log(base64string)
     try{
-      console.log('Updating user')
-      const updatedUser = await client.authentication.service.update(user._id as string, {
+      const updatedUser = await client.service('users').patch(user._id as string, {
         username: usernameValue,
-        avatar: base64string,
-        bio: aboutValue
+        avatar: user.avatar || base64string,
+        bio: aboutValue,
       })
-      console.log(updatedUser)
+      dispatch({type: 'user/user-details', payload: updatedUser})
+      dispatch({type: 'is-modal-open/toggle', payload: false})
     } catch(e) {
       console.error(e)
     }
@@ -46,7 +49,21 @@ const EditProfile: FunctionComponent = () => {
     <form onSubmit={updateUserEventHandler}>
       <div>
         {user.avatar ? (
-          <img src={user.avatar} />
+          <div className='relative w-32 h-32 rounded-full grid place-items-center'>
+            <img src={user.avatar} className='h-32 w-32 rounded-full absolute'/>
+            <label className='text-5xl text-white hover:brightness-50 cursor-pointer' htmlFor="file-input">
+            <IconBase>
+                <FaEdit />
+              </IconBase>
+            </label>
+            <input
+              type="file"
+              id="file-input"
+              accept="image/*"
+              className="hidden"
+              ref={file}
+            />
+          </div>
         ) : (
           <>
             <label

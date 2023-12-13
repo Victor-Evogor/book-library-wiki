@@ -3,7 +3,6 @@ import { Store } from '../../redux/Store'
 import { User } from '../../types/User'
 import Wiki from './components/Wiki'
 import useCreateDispatcher from '../../redux/useCreateDispatcher'
-import EditProfile from './components/EditProfile'
 import { FaEdit } from 'react-icons/fa'
 import noUser from '../../assets/images/no_user.png'
 
@@ -16,17 +15,17 @@ const UserProfile = () => {
 
       <div className='float-right' onClick={() => {
         dispatch({type: 'is-modal-open/toggle', payload: true})
-        dispatch({type:'modal-content', payload: <EditProfile/>})
+        dispatch({type:'modal-content', payload: 'edit-profile'})
       }}>
         <button><FaEdit/></button>
       </div>
-      <div className="w-32">
+      <div className="w-32 rounded-full">
         <img
           src={user.avatar || noUser}
           alt={user.username}
-          className="h-32 w-32"
+          className="h-32 w-32 rounded-full"
         />
-        <div className="text-xl font-bold">{user.username}</div>
+        <div className="text-xl font-bold mt-4">{user.username}</div>
       </div>
       
       <div>

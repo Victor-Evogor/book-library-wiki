@@ -10,20 +10,18 @@ import { client } from '../../../feathers'
 import useCreateDispatcher from '../../../redux/useCreateDispatcher'
 import noUser from '../../../assets/images/no_user-v2.svg'
 import noUserW from '../../../assets/images/no_user.png'
+import { useSelector } from 'react-redux'
+import { Store } from '../../../redux/Store'
+import { User } from '../../../types/User'
 
 const Navbar = memo(() => {
   const dispatch = useCreateDispatcher()
   const [showDropdown, setShowDropDown] = useState(false)
+  const user = useSelector<Store, User>(state => state.user)
 
   const [loggingOut] = useState(false)
   const [showLeftbar] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
-
-  const userData = {
-    email: 'victorevogor',
-    avatar: '',
-    name: 'Victor',
-  }
 
   const toggleLeftbar: MouseEventHandler<HTMLButtonElement> = () => {}
 
@@ -57,7 +55,7 @@ const Navbar = memo(() => {
             onClick={handleProfileClick}
           >
             <img
-              src={userData.avatar || noUserW}
+              src={user.avatar || noUserW}
               alt="profile"
               className="h-8 w-8 rounded-full object-cover"
             />
@@ -82,15 +80,15 @@ const Navbar = memo(() => {
                 <div className="py-1" role="none">
                   <div className="flex flex-col items-center">
                     <img
-                      src={userData.avatar || noUser}
+                      src={user.avatar || noUser}
                       alt="profile"
                       className="mb-2 h-16 w-16 rounded-full object-cover"
                     />
                     <div className="text-sm font-semibold text-gray-700 hover:underline">
-                      <Link to={`/profile`}>{userData.name}</Link>
+                      <Link to={`/app/profile`}>{user.username}</Link>
                     </div>
                     <div className="text-sm text-gray-500">
-                      {userData.email}
+                      {user.email}
                     </div>
                   </div>
                   <hr className="my-2" />

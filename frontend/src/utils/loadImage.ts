@@ -1,6 +1,6 @@
 
 
-const loadImage = (imageFile: File) => new Promise((resolve, reject)=> {
+const loadImage = (imageFile: File) => new Promise<string>((resolve, reject)=> {
     const fileReader = new FileReader()
     fileReader.readAsDataURL(imageFile)
     fileReader.onload = (ev) => {
@@ -13,7 +13,7 @@ const loadImage = (imageFile: File) => new Promise((resolve, reject)=> {
         reject(new Error('Couldn\'t convert image to base64 string'))
         return
       }
-      resolve(base64image)
+      resolve(base64image as string)
     }
 })
 

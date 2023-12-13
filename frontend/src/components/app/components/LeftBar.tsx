@@ -9,7 +9,6 @@ import {
 import { HiOutlineUserGroup } from "react-icons/hi2";
 import { GiTeamIdea } from "react-icons/gi";
 import useCreateDispatcher from "../../../redux/useCreateDispatcher";
-import Modal from "./Modal";
 import { useSelector } from "react-redux";
 import { Store } from "../../../redux/Store";
 
@@ -134,9 +133,7 @@ const Leftbar:FunctionComponent<LeftBarProps> = memo(({ showLeftbar }) => {
           })
           dispatch({
             type: 'modal-content',
-            payload: <Modal>
-              <div>Wiki Name</div>
-            </Modal>
+            payload: 'create-wiki'
           })
         }}>Create a Wiki Post</button>
       </div>
