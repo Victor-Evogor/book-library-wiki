@@ -11,9 +11,9 @@ export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState('')
   const errorMessageDuration = 3 // seconds
 
-  useEffect(()=>{
-    client.authentication.getAccessToken().then(accessToken => {
-      if (accessToken){
+  useEffect(() => {
+    client.authentication.getAccessToken().then((accessToken) => {
+      if (accessToken) {
         navigate('/app/home')
       }
     })
@@ -26,34 +26,40 @@ export default function SignUp() {
       }, errorMessageDuration * 1_000)
   }, [errorMessage])
 
-  const signUpHandler:MouseEventHandler<HTMLButtonElement> = (e) => {
+  const signUpHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
-    if(!emailInput.current || !passwordInput.current || !usernameInput.current)
+    console.log('Checking if ref has been set')
+    if (!emailInput.current || !passwordInput.current || !usernameInput.current)
       return
+    console.log('reading values')
+    const email = emailInput.current.value
+    const password = passwordInput.current.value
+    const username = usernameInput.current.value
+    if (!email || !password || !username) return
 
-      const email = emailInput.current.value
-      const password = passwordInput.current.value
-      const username = usernameInput.current.value
-      if(!email || !password || !username)
-        return
-      
-      user.create({
+    console.log('creating user with cred -->', { email, password, username })
+
+    user
+      .create({
         email,
         password,
-        username
-      }).then(async ()=>{
+        username,
+      })
+      .then(async () => {
         await client.authenticate({
           strategy: 'local',
           email,
-          password
+          password,
         })
         navigate('/app/home')
-      }).catch(error => {
+      })
+      .catch((error) => {
         setErrorMessage(error.message)
+        console.log(error)
       })
   }
 
-  const oAuthSignUpEventHandler:MouseEventHandler<HTMLButtonElement> = (e) =>{
+  const oAuthSignUpEventHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
   }
 
@@ -63,9 +69,7 @@ export default function SignUp() {
         <div className="pt-32 pb-12 md:pt-40 md:pb-20">
           {/* Page header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-            <h1 className="h1">
-              Welcome. We exist to make reading fun.
-            </h1>
+            <h1 className="h1">Welcome. We exist to make reading fun.</h1>
           </div>
 
           {/* Form */}
@@ -73,7 +77,10 @@ export default function SignUp() {
             <form>
               <div className="flex flex-wrap -mx-3">
                 <div className="w-full px-3">
-                  <button className="btn px-0 text-white bg-red-600 hover:bg-red-700 w-full relative flex items-center" onClick={oAuthSignUpEventHandler}>
+                  <button
+                    className="btn px-0 text-white bg-red-600 hover:bg-red-700 w-full relative flex items-center"
+                    onClick={oAuthSignUpEventHandler}
+                  >
                     <svg
                       className="w-4 h-4 fill-current text-white opacity-75 shrink-0 mx-4"
                       viewBox="0 0 16 16"
@@ -180,7 +187,10 @@ export default function SignUp() {
               </div>
               <div className="flex flex-wrap -mx-3 mt-6">
                 <div className="w-full px-3">
-                  <button className="btn text-white bg-purple-600 hover:bg-purple-700 w-full" onClick={signUpHandler}>
+                  <button
+                    className="btn text-white bg-purple-600 hover:bg-purple-700 w-full"
+                    onClick={signUpHandler}
+                  >
                     Sign up
                   </button>
                 </div>
