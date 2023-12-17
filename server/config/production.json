@@ -2,5 +2,5 @@
     "origins": [
         "https://booklibwiki.netlify.app"
     ],
-    "mongodb": "mongodb+srv://%s:%s@remote-db.yh3o1fg.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb": "mongodb+srv://%s:%s@remote-db.yh3o1fg.mongodb.net/book_library_wiki?retryWrites=true&w=majority"
 }
